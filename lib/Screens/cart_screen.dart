@@ -41,10 +41,17 @@ class CartScreen extends StatelessWidget {
                   FlatButton(
                     child: Text('ORDER NOW'),
                     onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
-                      );
+                      (cart.items.isNotEmpty)
+                          ? Provider.of<Orders>(context, listen: false)
+                              .addOrder(
+                              cart.items.values.toList(),
+                              cart.totalAmount,
+                            )
+                          : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('No items to order'),
+                              duration: Duration(seconds: 2),
+                            ));
+
                       cart.clear();
                     },
                     textColor: Theme.of(context).primaryColor,
@@ -58,12 +65,12 @@ class CartScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: cart.items.length,
               itemBuilder: (ctx, i) => CartItem(
-                    cart.items.values.toList()[i].id,
-                    cart.items.keys.toList()[i],
-                    cart.items.values.toList()[i].price,
-                    cart.items.values.toList()[i].quantity,
-                    cart.items.values.toList()[i].title,
-                  ),
+                cart.items.values.toList()[i].id,
+                cart.items.keys.toList()[i],
+                cart.items.values.toList()[i].price,
+                cart.items.values.toList()[i].quantity,
+                cart.items.values.toList()[i].title,
+              ),
             ),
           )
         ],
